@@ -1,0 +1,45 @@
+<div class="table-header">
+    <div class="table-title">Attendees</div>
+    <div class="export-button">
+        <button nz-button type="button" (click)="exportAttendeesCsv()">
+            <span nz-icon nzType="download"></span>
+            Export CSV
+        </button>
+    </div>
+</div>
+
+<nz-table
+  [nzData]="filteredData"
+  nzTableLayout="fixed"
+  [nzPageSize]="10"
+  [nzLoading]="loading"
+  (nzQueryParams)="onQueryParamsChange($event)">
+  <thead>
+    <tr>
+        @for (column of listOfColumn; track column) {
+            <ng-container *ngIf="isSortableColumnItem(column); else nonSortableHeader">
+                <th 
+                    [nzSortFn]="true"
+                    [nzSortOrder]="currentOrderField === column.sortField ? (currentOrderDirection || null) : null"
+                    [nzSortDirections]="column.sortDirections"
+                    (nzSortOrderChange)="onSortOrderChange(column.sortField, $event)">
+                    {{ column.title }}
+                </th>
+            </ng-container>
+            <ng-template #nonSortableHeader>
+                <th>
+                    {{ column.title }}
+                </th>
+            </ng-template>
+        }
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of filteredData">
+      <td>{{ data.id }}</td>
+      <td>{{ data.bookmarks }}</td>
+      <td>{{ data.nr_ratings }}</td>
+      <td>{{ data.register_at | dateFormat:'yyyy-MM-dd HH:mm:ss' }}</td>
+    </tr>
+  </tbody>
+</nz-table>

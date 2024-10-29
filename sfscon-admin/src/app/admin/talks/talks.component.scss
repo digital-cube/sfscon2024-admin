@@ -1,0 +1,11 @@
+.table-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 1rem;
+
+    .table-title {
+        font-size: 18px;
+        color: #000;
+    }
+}

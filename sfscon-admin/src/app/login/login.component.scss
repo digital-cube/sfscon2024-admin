@@ -1,0 +1,124 @@
+$blue: #2b579a;
+$red: #d4380d;
+$white: #fff;
+$black: rgb(31, 31, 31);
+
+.alert {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin-top: 1rem;
+  z-index: 50;
+  width: 100%;
+  max-width: 500px;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+  color: #721c24;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-bottom: 15%;
+
+  .logo-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 4rem;
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      margin: 0 auto;
+
+      .logo {
+        width: 150px;
+      }
+    }
+  }
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+
+  title {
+    text-align: center;
+    margin-bottom: 12px;
+    color: $blue;
+    font-size: 2rem;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: auto;
+    max-width: 300px;
+  }
+}
+
+.form-item {
+  flex-direction: column;
+}
+
+.form-label {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+}
+
+.ant-input {
+  border: 1px solid $black;
+  border-radius: 0.25rem !important;
+  padding: 0.625 0.75rem !important;
+}
+
+.ant-input-affix-wrapper {
+  border: 1px solid $black;
+  border-radius: 0.25rem !important;
+  padding: 0.625 0.75rem !important;
+
+  input[formcontrolname="password"].ant-input {
+    border: none !important;
+    padding: 0 !important;
+  }
+}
+
+.error-message {
+  margin-left: 12px;
+  color: $red;
+  font-size: 12px;
+  margin-top: 0.25rem;
+}
+
+.submit-button {
+  width: 100%;
+  height: 44px;
+  background-color: $black;
+  color: $white;
+  border: none;
+  border-radius: 5px;
+
+  &:hover {
+    border: 1px solid $black;
+    background-color: $white;
+    color: $black;
+  }
+}

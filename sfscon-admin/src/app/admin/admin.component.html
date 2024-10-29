@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="header">
+        <div class="header-content-left">
+            <div class="logo">SFSCON DASHBOARD</div>
+            <div class="nav">
+                <div class="links">
+                    <a [routerLink]="['/talks']" [queryParams]="{ search: searchTerm }" class="link" routerLinkActive="active">
+                        <button type="button" class="link-btn">Talks</button>
+                    </a>
+                    <a [routerLink]="['/attendees']" [queryParams]="{ search: searchTerm }" class="link" routerLinkActive="active">
+                        <button type="button" class="link-btn">Attendees</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="header-content-right">
+            <nz-input-group [nzSuffix]="suffixIconSearch">
+                <input nz-input placeholder="Search" [(ngModel)]="searchTerm" (input)="filterTable()" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <span nz-icon nzType="search"></span>
+            </ng-template>
+            <button nz-button type="button" (click)="syncData()">Sync data</button>
+            <button nz-button type="button" nzType="primary" (click)="logout()">
+                Log out
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="card-wrapper">
+            <div class="card">
+              <div class="card-label">Total events</div>
+              <div class="card-value">{{ summary?.total_sessions || '0' }}</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Registered users</div>
+              <div class="card-value">{{ summary?.all_users || '0' }}</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Total bookmarks</div>
+              <div class="card-value">{{ summary?.total_bookmarks || '0' }}</div>
+            </div>
+            <div class="card">
+              <div class="card-label">Ratings received</div>
+              <div class="card-value">{{ summary?.total_rates || '0' }}</div>
+            </div>
+          </div>
+    
+        <router-outlet></router-outlet>
+    </div>
+</div>

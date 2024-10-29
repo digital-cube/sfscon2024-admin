@@ -1,0 +1,87 @@
+<div class="relative">
+    <nz-alert 
+      *ngIf="loginError" 
+      nzType="error" 
+      nzMessage="{{ loginError }}" 
+      nzDescription="{{ alertDescription }}"
+      nzShowIcon 
+      class="alert"
+    ></nz-alert>
+</div>
+
+<div class="container">
+    <div class="logo-wrapper">
+      <header class="logo-container">
+        <img
+          src="./../../assets/noi-logo.svg"
+          alt="Logo"
+          class="logo"
+        />
+      </header>
+    </div>
+    
+    <div class="login-container">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="form">
+        <nz-form-item class="form-item">
+          <label for="username" class="form-label">Username</label>
+          <nz-form-control>
+            <nz-input-group nzSize="large">
+                <input
+                id="username"
+                nz-input
+                formControlName="username"
+                placeholder="Username"
+                spellcheck="false"
+                autocomplete="username"
+                [ngClass]="{
+                  'border-red':
+                    username?.invalid && (username?.touched || username?.dirty || formSubmitted)
+                }"
+              />
+            </nz-input-group>
+            <div *ngIf="username?.invalid && (username?.touched || username?.dirty || formSubmitted)" class="error-message">
+                Username is required
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+  
+        <nz-form-item class="form-item">
+          <label for="password" class="form-label">Password</label>
+          <nz-form-control>
+            <nz-input-group nzSize="large">
+              <input
+                id="password"
+                nz-input
+                [type]="passwordFieldType"
+                formControlName="password"
+                placeholder="Enter password"
+                spellcheck="false"
+                autocomplete="password"
+                [ngClass]="{
+                  'border-red':
+                    password?.invalid && (password?.touched || password?.dirty || formSubmitted)
+                }"
+              />
+              <ng-template #suffixIcon>
+                <span
+                  nz-icon
+                  nzTheme="outline"
+                  [nzType]="isPasswordVisible ? 'eye-invisible' : 'eye'"
+                  (click)="togglePasswordVisibility()"
+                  class="toggle-password-visibility"
+                ></span>
+              </ng-template>
+            </nz-input-group>
+            <div *ngIf="password?.invalid && (password?.touched || password?.dirty || formSubmitted)" class="error-message">
+              Password is required
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+        
+        <button nz-button nzType="primary" type="submit" class="submit-button">
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+  
