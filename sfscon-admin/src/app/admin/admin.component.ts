@@ -60,10 +60,9 @@ export class AdminComponent implements OnInit {
   }
 
   filterTable(): void {
-    // Navigate to the current route with the updated searchTerm
     this.router.navigate([], {
       queryParams: { search: this.searchTerm },
-      queryParamsHandling: 'merge', // Keeps other query params intact
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -71,8 +70,8 @@ export class AdminComponent implements OnInit {
   getSummary(): void {
     this.adminService.getSummary().subscribe(
       data => {
-        console.log('Summary data:', data); // Should log the correct API response
-        this.summary = data; // Store the data in 'summary'
+        console.log('Summary data:', data);
+        this.summary = data;
       },
       error => {
         console.error('Error fetching summary:', error);

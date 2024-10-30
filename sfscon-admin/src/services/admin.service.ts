@@ -8,9 +8,7 @@ import { tap, catchError } from 'rxjs/operators';
 })
 export class AdminService {
   private tokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
-  // private apiTokenSubject: BehaviorSubject<string | null> = new BehaviorSubject<string | null>(null);
   public token$: Observable<string | null> = this.tokenSubject.asObservable();
-  // public apiToken$: Observable<string | null> = this.apiTokenSubject.asObservable();
 
   constructor(private http: HttpClient) {
     this.loadTokens();
@@ -24,7 +22,6 @@ export class AdminService {
         localStorage.setItem('token', token);
         this.tokenSubject.next(token);
       }),
-      // switchMap(() => this.authorize()), // Call authorize to fetch api_token
       catchError(error => {
         console.error('Login failed', error);
         return of(null);
@@ -35,9 +32,7 @@ export class AdminService {
   /** Logout method to clear tokens and notify observers */
   logout(): void {
     localStorage.removeItem('token');
-    // localStorage.removeItem('api_token');
     this.tokenSubject.next(null);
-    // this.apiTokenSubject.next(null);
   }
 
   /** Reactive method to check if the user is logged in */
@@ -49,17 +44,19 @@ export class AdminService {
 
   /** Load tokens from localStorage into BehaviorSubjects */
   private loadTokens(): void {
-    const token = localStorage.getItem('token');
-    // const apiToken = localStorage.getItem('api_token');
-    this.tokenSubject.next(token);
-    // this.apiTokenSubject.next(apiToken);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const token = window.localStorage.getItem('token');
+      this.tokenSubject.next(token);
+    } else {
+      this.tokenSubject.next(null);
+    }
   }
 
   /** Helper method to create headers with the normal token */
   private createHeaders(): HttpHeaders {
-    const token = this.tokenSubject.value; // Get the latest normal token
+    const token = this.tokenSubject.value;
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}` // Use the normal token here
+      'Authorization': `Bearer ${token}`
     });
   }
 
@@ -123,18 +120,6 @@ export class AdminService {
     );
   }
 
-  // getAttendees(): Observable<any> {
-  //   const headers = this.createHeaders();
-  //   console.log('Fetching attendees with headers', headers);
-  //   return this.http.get<{ data: any[] }>('/api/admin/users', { headers }).pipe(
-  //     map(response => response.data),
-  //     catchError(error => {
-  //       console.error('Error fetching attendees', error);
-  //       return of([]);
-  //     })
-  //   );
-  // }
-
   syncData(): Observable<any> {
     const headers = this.createHeaders();
     console.log('Syncing data with headers', headers);
@@ -185,8 +170,6 @@ export class AdminService {
       },
       error: (error) => {
         console.error('Error downloading CSV:', error);
-        // Here you could add user notification about the error
-        // For example, using a notification service
       }
     });
   }

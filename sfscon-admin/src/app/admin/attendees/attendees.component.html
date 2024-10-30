@@ -22,7 +22,8 @@
                     [nzSortFn]="true"
                     [nzSortOrder]="currentOrderField === column.sortField ? (currentOrderDirection || null) : null"
                     [nzSortDirections]="column.sortDirections"
-                    (nzSortOrderChange)="onSortOrderChange(column.sortField, $event)">
+                    (nzSortOrderChange)="onSortOrderChange(column.sortField, $event)"
+                    [style.width]="column.width">
                     {{ column.title }}
                 </th>
             </ng-container>

@@ -4,37 +4,12 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzAlertModule } from 'ng-zorro-antd/alert';
 import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { NzTableModule, NzTableSortFn, NzTableSortOrder } from 'ng-zorro-antd/table';
+import { NzTableModule, NzTableSortOrder } from 'ng-zorro-antd/table';
 import { AdminService } from '../../../services/admin.service';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { NzTableQueryParams } from 'ng-zorro-antd/table';
 import { CommonModule } from '@angular/common';
-
-interface DataItem {
-  title: string;
-  bookmarks: string;
-  speakers: string;
-  rates: number;
-  avg_rate: number;
-}
-
-interface BaseColumnItem {
-  title: string;
-  priority: boolean | number;
-}
-
-interface SortableColumnItem extends BaseColumnItem {
-  sortable: true;
-  sortDirections: NzTableSortOrder[];
-  sortField: string;
-}
-
-interface NonSortableColumnItem extends BaseColumnItem {
-  sortable: false;
-}
-
-type ColumnItem = SortableColumnItem | NonSortableColumnItem;
+import * as models from '../../../shared/models';
 
 @Component({
   selector: 'app-talks',
@@ -58,42 +33,47 @@ export class TalksComponent implements OnInit {
   isExporting = false;
   loading = false;
 
-  listOfColumn: ColumnItem[] = [
+  listOfColumn: models.ColumnItem[] = [
     {
       title: 'Title',
       priority: false,
       sortable: false,
+      width: '35%'
     },
     {
       title: 'Speakers',
       priority: false,
       sortable: false,
+      width: '20%'
     },
     {
       title: 'Bookmarks',
       priority: false,
       sortable: true,
       sortDirections: ['ascend', 'descend', null],
-      sortField: 'bookmarks'
+      sortField: 'bookmarks',
+      width: '15%'
     },
     {
       title: 'Ratings',
       priority: false,
       sortable: true,
       sortDirections: ['ascend', 'descend', null],
-      sortField: 'rates'
+      sortField: 'rates',
+      width: '15%'
     },
     {
       title: 'Average Rating',
       priority: false,
       sortable: true,
       sortDirections: ['ascend', 'descend', null],
-      sortField: 'avg_rate'
+      sortField: 'avg_rate',
+      width: '15%'
     }
   ];
 
-  listOfData: DataItem[] = [];
-  filteredData: DataItem[] = [];
+  listOfData: models.TalksDataItem[] = [];
+  filteredData: models.TalksDataItem[] = [];
   searchTerm: string = '';
 
   currentOrderField?: string;
@@ -115,14 +95,11 @@ export class TalksComponent implements OnInit {
     const currentSort = sort.find(item => item.value !== null);
     
     if (currentSort) {
-      // Ensure `key` is a number and use it to access listOfColumn
-      const sortIndex = Number(currentSort.key); // Convert key to a number
+      const sortIndex = Number(currentSort.key);
   
-      // Make sure to check if sortIndex is a valid index
       if (sortIndex >= 0 && sortIndex < this.listOfColumn.length) {
         const column = this.listOfColumn[sortIndex];
   
-        // Type guard to ensure column is a SortableColumnItem
         if (this.isSortableColumnItem(column)) {
           this.currentOrderField = column.sortField;
           this.currentOrderDirection = currentSort.value || undefined;
@@ -143,8 +120,7 @@ export class TalksComponent implements OnInit {
     }
   }
   
-  // Type guard to ensure the column is SortableColumnItem
-  isSortableColumnItem(item: ColumnItem): item is SortableColumnItem {
+  isSortableColumnItem(item: models.ColumnItem): item is models.SortableColumnItem {
     return item.sortable === true;
   }
 
@@ -171,7 +147,7 @@ export class TalksComponent implements OnInit {
     this.loading = true;
     this.adminService.getConferences(this.currentOrderField, this.currentOrderDirection)
     .subscribe({
-      next: (data: DataItem[]) => {
+      next: (data: models.TalksDataItem[]) => {
         this.listOfData = data;
         this.filterData();
         this.loading = false;
@@ -199,8 +175,6 @@ export class TalksComponent implements OnInit {
   exportTalksCsv(): void {
     this.isExporting = true;
     this.adminService.exportTalksCsv();
-    // You might want to add a timeout or other mechanism to reset isExporting
-    // since the download happens outside Angular's change detection
     setTimeout(() => this.isExporting = false, 1000);
   }
 }

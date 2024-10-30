@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -29,6 +29,10 @@ import { AdminService } from '../../services/admin.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
+  fb = inject(FormBuilder);
+  router = inject(Router);
+  adminService = inject(AdminService);
+  
   loginForm: FormGroup;
   passwordFieldType: string = 'password';
   isPasswordVisible: boolean = false;
@@ -36,12 +40,7 @@ export class LoginComponent {
   loginError: string | null = null;
   alertDescription: string | null = null;
 
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private router: Router,
-    private adminService: AdminService
-  ) {
+  constructor() {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', Validators.required],
